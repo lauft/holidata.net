@@ -19,7 +19,7 @@ jobs:
         run: |
           CURRENT_YEAR=$(date +'%Y')
           NEXT_YEAR=$(( CURRENT_YEAR + 1 ))
-          echo "name=next-year::${NEXT_YEAR}" >> "${GITHUB_OUTPUT}"
+          echo "next-year=${NEXT_YEAR}" >> "${GITHUB_OUTPUT}"
 
       - name: Set up Python environment
         run: |
