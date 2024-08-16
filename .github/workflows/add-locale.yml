@@ -29,7 +29,6 @@ jobs:
 
       - name: Add data for the next year
         run: |
-          LOCALE_DIR="holidata"
           year="${{ steps.get-next-year.outputs.next-year }}"
           formats=( "json" "yaml" "xml" "csv" )
           
@@ -37,7 +36,7 @@ jobs:
             echo "Generating locale '${locale}' files for ${year}..."
             for format in "${formats[@]}" ; do
               echo "Generating ${locale}/${year}.${format}"
-              venv/bin/holidata --year="${year}" --locale="${locale}" --output="${format}" > "${LOCALE_DIR}/${locale}/${year}.${format}"
+              venv/bin/holidata --year="${year}" --locale="${locale}" --output="${format}" > "${locale}/${year}.${format}"
             done
           
             echo "Generated locale ${locale} for year ${year}"
