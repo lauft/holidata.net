@@ -24,8 +24,14 @@ jobs:
             echo "Error: Locale '$LOCALE' does not match the required format '[a-z]{2}-[A-Z]{2}'!"
             exit 1
           fi
-        env:
-          LOCALE: ${{ github.event.inputs.locale }}
+
+      - name: Setup locale folder
+        run: |
+          if [[ -d "holidata/${{ github.event.inputs.locale }}" ]] ; then
+            echo "Error: Locale folder '${{ github.event.inputs.locale }}' already exists!"
+            exit 1
+          fi
+          mkdir "holidata/${{ github.event.inputs.locale }}"
 
       - name: Set up Python environment
         run: |
