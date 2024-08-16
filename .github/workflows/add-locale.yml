@@ -1,0 +1,60 @@
+name: Add locale
+
+on:
+  workflow_dispatch:
+    inputs:
+      locale:
+        description: 'Locale in format [a-z]{2}-[A-Z]{2}'
+        required: true
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.inputs.locale }}
+  cancel-in-progress: true
+
+jobs:
+  create-data:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Check locale format
+        run: |
+          if! echo "$LOCALE" | grep -qE "^[a-z]{2}-[A-Z]{2}$"; then
+            echo "Error: Locale '$LOCALE' does not match the required format [a-z]{2}-[A-Z]{2}"
+            exit 1
+          fi
+        env:
+          LOCALE: ${{ github.event.inputs.locale }}
+
+      - name: Set up Python environment
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+
+      - name: Run Python script
+        run: |
+          python create_locale_data.py ${{ github.event.inputs.locale }}
+        continue-on-error: true
+
+      - name: Check if Python script failed
+        if: failure()
+        run: |
+          git reset --hard
+          exit 1
+
+      - name: Add and commit files
+        run: |
+          git add./${{ github.event.inputs.locale }}
+          git commit -m "Added data for ${{ github.event.inputs.locale }}"
+
+      - name: Create and merge PR
+        uses: actions/create-pull-request@v3
+        with:
+          title: "Added data for ${{ github.event.inputs.locale }}"
+          body: "Automatically generated data for ${{ github.event.inputs.locale }}"
+          branch: "locale-${{ github.event.inputs.locale }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MERGE_METHOD: 'merge'
