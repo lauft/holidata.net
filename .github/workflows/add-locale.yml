@@ -36,9 +36,8 @@ jobs:
       - name: Set up Python environment
         run: |
           python -m venv venv
-          source venv/bin/activate
-          pip install --upgrade pip
-          pip install holidata
+          venv/bin/pip install --upgrade pip
+          venv/bin/pip install holidata
 
       - name: Add locale
         run: |
@@ -51,7 +50,7 @@ jobs:
             echo "Generating locale '${locale}' files for ${year}..."
             for format in "${formats[@]}" ; do
               echo "Generating ${locale}/${year}.${format}"
-              holidata --year="${year}" --locale="${locale}" --output="${format}" > "${LOCALE_DIR}/${locale}/${year}.${format}"
+              venv/bin/holidata --year="${year}" --locale="${locale}" --output="${format}" > "${LOCALE_DIR}/${locale}/${year}.${format}"
             done
           
             echo "Generated locale ${locale} for year ${year}"
