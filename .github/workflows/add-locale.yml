@@ -2,10 +2,6 @@ name: Add locale
 
 on:
   workflow_dispatch:
-    inputs:
-      locale:
-        description: "Locale in format [a-z]{2}-[A-Z]{2}"
-        required: true
 
 concurrency:
   group: "update-locale"
@@ -18,35 +14,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Check locale format
+      - name: Determine next year
+        id: get-next-year
         run: |
-          if ! grep -qE "^[a-z]{2}-[A-Z]{2}$" <<< "${{ github.event.inputs.locale }}" ; then
-            echo "Error: Locale '${{ github.event.inputs.locale }}' does not match the required format '[a-z]{2}-[A-Z]{2}'!"
-            exit 1
-          fi
+          CURRENT_YEAR=$(date +'%Y')
+          NEXT_YEAR=$(( CURRENT_YEAR + 1 ))
+          echo "name=next-year::${NEXT_YEAR}" >> "${GITHUB_OUTPUT}"
 
-#      - name: Setup locale folder
-#        run: |
-#          if [[ -d "holidata/${{ github.event.inputs.locale }}" ]] ; then
-#            echo "Error: Locale folder '${{ github.event.inputs.locale }}' already exists!"
-#            exit 1
-#          fi
-#          mkdir "holidata/${{ github.event.inputs.locale }}"
-#
       - name: Set up Python environment
         run: |
           python -m venv venv
           venv/bin/pip install --upgrade pip
           venv/bin/pip install holidata
 
-      - name: Add locale
+      - name: Add data for the next year
         run: |
           LOCALE_DIR="holidata"
-          years=( "2011" "2023" )
-          locale="${{ github.event.inputs.locale }}"
+          year="${{ steps.get-next-year.outputs.next-year }}"
           formats=( "json" "yaml" "xml" "csv" )
           
-          for year in "${years[@]}" ; do
+          for locale in holidata/??-?? ; do
             echo "Generating locale '${locale}' files for ${year}..."
             for format in "${formats[@]}" ; do
               echo "Generating ${locale}/${year}.${format}"
@@ -54,9 +41,6 @@ jobs:
             done
           
             echo "Generated locale ${locale} for year ${year}"
-        
-            git add "${LOCALE_DIR}/${locale}"
-            git commit -m "Add holidays for ${locale} ${year}" || exit 1
           done
         continue-on-error: false
 
