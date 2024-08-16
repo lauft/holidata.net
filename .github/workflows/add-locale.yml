@@ -21,7 +21,7 @@ jobs:
       - name: Check locale format
         run: |
           if ! grep -qE "^[a-z]{2}-[A-Z]{2}$" <<< "${{ github.event.inputs.locale }}" ; then
-            echo "Error: Locale '$LOCALE' does not match the required format '[a-z]{2}-[A-Z]{2}'!"
+            echo "Error: Locale '${{ github.event.inputs.locale }}' does not match the required format '[a-z]{2}-[A-Z]{2}'!"
             exit 1
           fi
 
