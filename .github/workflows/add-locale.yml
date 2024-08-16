@@ -25,14 +25,14 @@ jobs:
             exit 1
           fi
 
-      - name: Setup locale folder
-        run: |
-          if [[ -d "holidata/${{ github.event.inputs.locale }}" ]] ; then
-            echo "Error: Locale folder '${{ github.event.inputs.locale }}' already exists!"
-            exit 1
-          fi
-          mkdir "holidata/${{ github.event.inputs.locale }}"
-
+#      - name: Setup locale folder
+#        run: |
+#          if [[ -d "holidata/${{ github.event.inputs.locale }}" ]] ; then
+#            echo "Error: Locale folder '${{ github.event.inputs.locale }}' already exists!"
+#            exit 1
+#          fi
+#          mkdir "holidata/${{ github.event.inputs.locale }}"
+#
       - name: Set up Python environment
         run: |
           python -m venv venv
