@@ -40,9 +40,25 @@ jobs:
           pip install --upgrade pip
           pip install holidata
 
-      - name: Run Python script
+      - name: Add locale
         run: |
-          python create_locale_data.py ${{ github.event.inputs.locale }}
+          LOCALE_DIR="holidata"
+          years=( "2011" "2023" )
+          locale="${{ github.event.inputs.locale }}"
+          formats=( "json" "yaml" "xml" "csv" )
+          
+          for year in "${years[@]}" ; do
+            echo "Generating locale '${locale}' files for ${year}..."
+            for format in "${formats[@]}" ; do
+              echo "Generating ${locale}/${year}.${format}"
+              holidata --year="${year}" --locale="${locale}" --output="${format}" > "${LOCALE_DIR}/${locale}/${year}.${format}"
+            done
+          
+            echo "Generated locale ${locale} for year ${year}"
+        
+            git add "${LOCALE_DIR}/${locale}"
+            git commit -m "Add holidays for ${locale} ${year}" || exit 1
+          done
         continue-on-error: false
 
 #      - name: Create Pull Request
