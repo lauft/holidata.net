@@ -36,7 +36,7 @@ jobs:
             echo "Generating locale '${locale}' files for ${year}..."
             for format in "${formats[@]}" ; do
               echo "Generating ${locale}/${year}.${format}"
-              venv/bin/holidata --year="${year}" --locale="${locale}" --output="${format}" > "${locale}/${year}.${format}"
+              venv/bin/holidata --year="${year}" --locale="${locale/holidata\//}" --output="${format}" > "${locale}/${year}.${format}"
             done
           
             echo "Generated locale ${locale} for year ${year}"
