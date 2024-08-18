@@ -3,7 +3,7 @@ name: Upgrade year
 on:
   workflow_dispatch:
   schedule:
-    - '0 0 1 8 *'
+    - cron: '0 0 1 8 *'
 
 concurrency:
   group: "update-locales"
