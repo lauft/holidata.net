@@ -23,7 +23,7 @@ jobs:
         id: get-next-year
         run: |
           current_year=$(date +'%Y')
-          echo "year=$(( current_year + 1 ))" >> "${GITHUB_OUTPUT}"
+          echo "year=$(( current_year ))" >> "${GITHUB_OUTPUT}"
 
       - name: Set up Python environment
         run: |
