@@ -69,10 +69,10 @@ jobs:
             [1]: https://github.com/peter-evans/create-pull-request
           branch: upgrade-year
 
-#      - name: Merge Pull Request
-#        if: "${{ steps.cpr.outputs.pull-request-number != '' }}"
-#        uses: juliangruber/merge-pull-request-action@v1
-#        with:
-#          github-token: ${{ secrets.GITHUB_TOKEN }}
-#          number: ${{ steps.cpr.outputs.pull-request-number }}
-#          method: rebase
+      - name: Merge Pull Request
+        if: "${{ steps.cpr.outputs.pull-request-number != '' }}"
+        uses: juliangruber/merge-pull-request-action@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          number: ${{ steps.cpr.outputs.pull-request-number }}
+          method: rebase
