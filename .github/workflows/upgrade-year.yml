@@ -55,21 +55,21 @@ jobs:
           echo "countries=${countries//,/, }" >> "${GITHUB_OUTPUT}"
           current_date="$( date +'%Y-%m-%d' )"
           cat <<EOF > "content/news/${current_date}-locales-updated.md"
----
-title: "Locales updated"
-date: ${current_date}T00:00:00+02:00
-layout: "news_item"
----
-
-The holidata for ${year} is now available for all locales!
-<!--more-->
-We have published the holiday data set for ${year}.
-The holiday data is currently available for ${#countries} countries and growing.
-See [here](https://github.com/GothenburgBitFactory/holidata) on how you can contribute to adding more locales!
-
-If you spot an error, please report it [here](https://github.com/GothenburgBitFactory/holidata/issues/new?labels=bug&template=bug_report.md&title=Error+in+locale+LOCALE%5B%2C+year+YEAR%5D).
-
-EOF
+          ---
+          title: "Locales updated"
+          date: ${current_date}T00:00:00+02:00
+          layout: "news_item"
+          ---
+          
+          The holidata for ${year} is now available for all locales!
+          <!--more-->
+          We have published the holiday data set for ${year}.
+          The holiday data is currently available for ${#countries} countries and growing.
+          See [here](https://github.com/GothenburgBitFactory/holidata) on how you can contribute to adding more locales!
+          
+          If you spot an error, please report it [here](https://github.com/GothenburgBitFactory/holidata/issues/new?labels=bug&template=bug_report.md&title=Error+in+locale+LOCALE%5B%2C+year+YEAR%5D).
+          
+          EOF
         continue-on-error: false
 
       - name: Create Pull Request
